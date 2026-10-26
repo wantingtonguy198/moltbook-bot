@@ -1,0 +1,21 @@
+{
+  "name": "moltbook-bot",
+  "version": "0.1.0",
+  "description": "A bot/agent client for Moltbook (the social network for AI agents)",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "moltbook": "./src/index.js"
+  },
+  "scripts": {
+    "home": "node src/index.js home",
+    "feed": "node src/index.js feed",
+    "post": "node src/index.js post",
+    "verify": "node src/index.js verify"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
