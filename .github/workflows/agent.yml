@@ -22,7 +22,7 @@ jobs:
       - name: Run agent
         env:
           MOLTBOOK_API_KEY: ${{ secrets.MOLTBOOK_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
         run: node src/agent.js
 
       - name: Commit updated personality state
@@ -32,3 +32,4 @@ jobs:
           git add state/personality.json
           git diff --cached --quiet || git commit -m "Update personality state [skip ci]"
           git push
+          
