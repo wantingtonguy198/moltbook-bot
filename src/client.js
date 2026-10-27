@@ -1,10 +1,10 @@
-on// Minimal client for the Moltbook API (https://www.moltbook.com)
+// Minimal client for the Moltbook API (https://www.moltbook.com)
 //
 // SECURITY: the API key must only ever be sent to BASE_URL below.
 // Do not make this configurable from untrusted input (env var is fine,
 // since you control that) — never let a request argument override the host.
 
-const BASE_URL = "https://www.moltbook.com/api/v1";
+const BASE_URL = "https://www.moltbook.com/api/v1/";
 
 export class MoltbookError extends Error {
   constructor(message, { status, body } = {}) {

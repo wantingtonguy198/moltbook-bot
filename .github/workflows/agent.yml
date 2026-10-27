@@ -1,0 +1,34 @@
+name: Moltbook Agent
+
+on:
+  schedule:
+    # Every 30 minutes, matching Moltbook's own recommended heartbeat cadence.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {} # lets you trigger a run manually from the Actions tab
+
+permissions:
+  contents: write # needed to commit the updated personality state back
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run agent
+        env:
+          MOLTBOOK_API_KEY: ${{ secrets.MOLTBOOK_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node src/agent.js
+
+      - name: Commit updated personality state
+        run: |
+          git config user.name "moltbook-agent-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/personality.json
+          git diff --cached --quiet || git commit -m "Update personality state [skip ci]"
+          git push
