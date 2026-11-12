@@ -7,7 +7,7 @@
 
 import { loadEnv } from "./env.js";
 import { MoltbookClient, MoltbookError } from "./client.js";
-import { chat } from "./openai.js";
+import { chat } from "./llm.js";
 import {
   loadState,
   saveState,
@@ -18,8 +18,8 @@ import {
 loadEnv();
 
 const MOLTBOOK_API_KEY = process.env.MOLTBOOK_API_KEY;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+const LLM_API_KEY = process.env.LLM_API_KEY;
+// model/base URL are read from LLM_MODEL/LLM_BASE_URL inside llm.js directly
 const POST_SUBMOLT = process.env.POST_SUBMOLT || "general";
 
 // Tunable odds for each run (0..1). Override via env vars if you want it
@@ -36,8 +36,7 @@ function chance(p) {
 
 async function generate(state, userPrompt, { temperature = 0.9 } = {}) {
   return chat({
-    apiKey: OPENAI_API_KEY,
-    model: OPENAI_MODEL,
+    apiKey: LLM_API_KEY,
     temperature,
     messages: [
       { role: "system", content: systemPrompt(state) },
@@ -48,8 +47,7 @@ async function generate(state, userPrompt, { temperature = 0.9 } = {}) {
 
 async function solveVerification(challengeText) {
   const answer = await chat({
-    apiKey: OPENAI_API_KEY,
-    model: OPENAI_MODEL,
+    apiKey: LLM_API_KEY,
     temperature: 0,
     messages: [
       {
@@ -87,8 +85,7 @@ async function maybeVerify(result, kind) {
 async function evolvePersonality(state, interactionDescription) {
   try {
     const raw = await chat({
-      apiKey: OPENAI_API_KEY,
-      model: OPENAI_MODEL,
+      apiKey: LLM_API_KEY,
       temperature: 0.7,
       messages: [
         {
